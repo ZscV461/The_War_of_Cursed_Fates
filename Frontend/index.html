@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The War of Cursed Fates</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #111827;
+      color: #e5e7eb;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+    header {
+      position: relative;
+      height: 70vh; /* Reduced height */
+      max-width: 60%; /* Reduced width and framed look */
+      margin: 0 auto; /* Center the header */
+      border: 2px solid #22d3ee; /* Frame border */
+      overflow: hidden;
+      display: flex;
+      flex-direction: column; /* Stack text vertically */
+      justify-content: flex-start; /* Align content to top */
+    }
+    header video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Fit video within frame without stretching */
+      opacity: 0.5;
+      z-index: 0;
+    }
+    header .content {
+      position: relative;
+      text-align: center;
+      z-index: 1;
+      padding: 10px; /* Adjust padding for frame */
+      background: rgba(17, 24, 39, 0.7); /* Semi-transparent background for readability */
+    }
+    header h1 {
+      font-size: 2rem; /* Further reduced to fit smaller frame */
+      color: #22d3ee;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      margin-bottom: 0.5rem; /* Reduced margin */
+    }
+    header p {
+      font-size: 1rem; /* Further reduced to fit smaller frame */
+      color: #d1d5db;
+    }
+    section {
+      padding: 4rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    section h2 {
+      font-size: 2.5rem;
+      color: #22d3ee;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .description {
+      background-color: #1f2937;
+      text-align: center;
+    }
+    .description p {
+      font-size: 1.2rem;
+      color: #d1d5db;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .challenges {
+      background-color: #111827;
+    }
+    .challenges .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .challenges .card {
+      background-color: #1f2937;
+      padding: 1.5rem;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+    .challenges .card:hover {
+      transform: scale(1.05);
+    }
+    .challenges .card p {
+      font-size: 1.1rem;
+      color: #d1d5db;
+    }
+    .roles {
+      background-color: #1f2937;
+    }
+    .roles .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .role-card {
+      background-color: #111827;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .role-card:hover {
+      transform: scale(1.05);
+    }
+    .role-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      opacity: 0.75;
+      transition: opacity 0.3s ease;
+    }
+    .role-card:hover img {
+      opacity: 1;
+    }
+    .role-card .content {
+      padding: 1.5rem;
+    }
+    .role-card h3 {
+      font-size: 1.5rem;
+      color: #22d3ee;
+      margin-bottom: 0.5rem;
+    }
+    .role-card p {
+      font-size: 1rem;
+      color: #d1d5db;
+    }
+    .role-card button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #22d3ee;
+      color: #111827;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .role-card button:hover {
+      background-color: #06b6d4;
+    }
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.5rem; /* Further reduce for mobile */
+      }
+      header p {
+        font-size: 0.9rem; /* Further reduce for mobile */
+      }
+      section h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+  <video id="header-video" loop muted autoplay>
+    <source src="../Data/header-vid.mp4" type="video/mp4">
+    Your browser does not support the video tag or the file could not be loaded.
+  </video>
+  <div class="content">
+    <h1>The War of Cursed Fates</h1>
+    <p>Master Cybersecurity Through Real-World Simulations</p>
+  </div>
+</header>
+
+
+  <section class="description">
+    <h2>What is The War of Cursed Fates?</h2>
+    <p>
+      The War of Cursed Fates is an interactive cybersecurity training platform designed to simulate real-world attack and defense scenarios. Whether you're a university student, a corporate trainee, or part of a SOC team, our platform offers hands-on experience in Red Team, Blue Team, and Red vs. Blue live modes. Powered by AI-driven analytics, it provides detailed performance feedback to help you grow as a cybersecurity professional.
+    </p>
+  </section>
+
+  <section class="challenges">
+    <h2>Rise to the Challenge</h2>
+    <div class="grid">
+      <div class="card">
+        <p>"Outsmart the enemy. Can you exploit the system before they lock you out?"</p>
+      </div>
+      <div class="card">
+        <p>"Defend the network. Every second counts. Are you fast enough to stop the breach?"</p>
+      </div>
+      <div class="card">
+        <p>"Red vs. Blue. Prove your skills in the ultimate cybersecurity showdown!"</p>
+      </div>
+    </div>
+  </section>
+
+<section class="roles">
+  <h2>Choose Your Role</h2>
+  <div class="grid">
+    <div class="role-card">
+      <img src="https://wallpaperaccess.com/full/2414353.jpg" alt="Red Team">
+      <div class="content">
+        <h3>Red Team</h3>
+        <p>Launch attacks, exploit vulnerabilities, and test your offensive skills.</p>
+        <button onclick="playRoleSound('red')">Select Role</button>
+      </div>
+    </div>
+    <div class="role-card">
+      <img src="https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg" alt="Blue Team">
+      <div class="content">
+        <h3>Blue Team</h3>
+        <p>Monitor, detect, and respond to threats in real-time.</p>
+        <button onclick="playRoleSound('blue')">Select Role</button>
+      </div>
+    </div>
+    <div class="role-card">
+      <img src="https://wallpaperbat.com/img/53868590-gojo-vs-sukuna-wallpaper.png" alt="Red vs. Blue">
+      <div class="content">
+        <h3>Red vs. Blue</h3>
+        <p>Face off in a live battle of attack and defense.</p>
+        <button onclick="playRoleSound('duel')">Select Role</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const sounds = {
+    red: new Audio('../Data/fate.mp3'),
+    blue: new Audio('../Data/audio/blue-team.mp3'),
+    duel: new Audio('../Data/audio/duel.mp3')
+  };
+
+  function playRoleSound(role) {
+  const sound = sounds[role];
+  if (sound) {
+    sound.play().then(() => {
+      setTimeout(() => {
+        alert(`Selected ${role.charAt(0).toUpperCase() + role.slice(1)} Team! Ready to start your training?`);
+        if (role === 'red') {
+          window.location.href = 'red-team.html'; // هذا هو اسم الصفحة الجديدة
+        }
+      }, 500);
+    }).catch(error => console.error('Audio playback failed:', error));
+  }
+}
+
+</script>
+</body>
+</html> 

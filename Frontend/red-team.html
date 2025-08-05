@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Red Team Arena</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #111827;
+      color: #e5e7eb;
+      font-family: Arial, sans-serif;
+    }
+
+    header img {
+      width: 100%;
+      height: 70vh;
+      object-fit: cover;
+      opacity: 0.75;
+    }
+
+    header h1 {
+      text-align: center;
+      margin-top: 0rem;
+      font-size: 3rem;
+      color: #22d3ee;
+      text-shadow: 2px 2px 5px #000;
+    }
+
+    header p {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #d1d5db;
+      margin-bottom: 2rem;
+    }
+
+    section {
+      padding: 3rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      color: #22d3ee;
+      margin-bottom: 0.5rem;
+    }
+
+    section .challenge-msg {
+      font-style: italic;
+      color: #9ca3af;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: #1f2937;
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      background-color: #374151;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      color: #22d3ee;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      color: #d1d5db;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="https://wallpaperaccess.com/full/2414353.jpg" alt="Red Team" />
+    <h1>Red Team Arena</h1>
+    <p>Launch, Exploit.</p>
+  </header>
+
+  <!-- Web Exploitation -->
+  <section>
+    <h2>🧨 Web Exploitation</h2>
+    <p class="challenge-msg">"Can you crack the code before the system cracks you?"</p>
+    <div class="grid">
+      <div class="card" onclick="location.href='sql-injection.html'">
+        <h3>SQL Injection</h3>
+        <p>Extract data from vulnerable web apps.</p>
+      </div>
+      <div class="card" onclick="location.href='xss.html'">
+        <h3>Cross-Site Scripting (XSS)</h3>
+        <p>Execute malicious scripts in user browsers.</p>
+      </div>
+      <div class="card" onclick="location.href='file-upload.html'">
+        <h3>Malicious File Upload</h3>
+        <p>Upload shells and bypass file filters.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Exploitation -->
+  <section>
+    <h2>🧓 Post Exploitation</h2>
+    <p class="challenge-msg">"You're inside... but can you elevate and dominate?"</p>
+    <div class="grid">
+      <div class="card" onclick="location.href='privilege-escalation.html'">
+        <h3>Privilege Escalation</h3>
+        <p>Gain root/admin access from low-priv users.</p>
+      </div>
+      <div class="card" onclick="location.href='lateral-movement.html'">
+        <h3>Lateral Movement</h3>
+        <p>Move through the network without being caught.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phishing & SE -->
+  <section>
+    <h2>🎯 Phishing & Social Engineering</h2>
+    <p class="challenge-msg">"No exploit needed... just words. Outsmart your target."</p>
+    <div class="grid">
+      <div class="card" onclick="location.href='phishing-email.html'">
+        <h3>Phishing Email</h3>
+        <p>Craft emails to trick targets into opening payloads.</p>
+      </div>
+      <div class="card" onclick="location.href='fake-login.html'">
+        <h3>Fake Login Page</h3>
+        <p>Steal credentials using a cloned portal.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Malware Simulation -->
+  <section>
+    <h2>💀 Malware Simulation</h2>
+    <p class="challenge-msg">"What happens when your payload lands? Let chaos unfold."</p>
+    <div class="grid">
+      <div class="card" onclick="location.href='ransomware.html'">
+        <h3>Ransomware Simulation</h3>
+        <p>Encrypt files and demand ransom. Will they pay?</p>
+      </div>
+      <div class="card" onclick="location.href='reverse-shell.html'">
+        <h3>Reverse Shell</h3>
+        <p>Establish remote access and control the system.</p>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
