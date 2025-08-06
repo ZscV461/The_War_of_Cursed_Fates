@@ -45,43 +45,81 @@
       font-size: 2rem;
       color: #22d3ee;
       margin-bottom: 0.5rem;
+      text-align: center;
     }
 
     section .challenge-msg {
       font-style: italic;
       color: #9ca3af;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1.5rem;
     }
 
-    .card {
+    .role-card {
       background-color: #1f2937;
       border-radius: 8px;
-      padding: 1.5rem;
-      text-align: center;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 10px #0ea5e944;
     }
 
-    .card:hover {
+    .role-card:hover {
       transform: scale(1.05);
-      background-color: #374151;
+      box-shadow: 0 0 20px #22d3ee66;
     }
 
-    .card h3 {
-      font-size: 1.3rem;
+    .role-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      opacity: 0.9;
+      transition: opacity 0.3s ease;
+    }
+
+    .role-card:hover img {
+      opacity: 1;
+    }
+
+    .role-card .content {
+      padding: 1.2rem;
+    }
+
+    .role-card h3 {
+      font-size: 1.4rem;
       color: #22d3ee;
       margin-bottom: 0.5rem;
     }
 
-    .card p {
-      color: #d1d5db;
+    .role-card p {
       font-size: 1rem;
+      color: #d1d5db;
+    }
+
+    .role-card button {
+      margin-top: 1rem;
+      padding: 0.5rem 1.2rem;
+      background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+      color: #111827;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 10px #0ea5e999;
+      font-size: 0.95rem;
+    }
+
+    .role-card button:hover {
+      transform: scale(1.08);
+      background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+      box-shadow: 0 0 20px #22d3eeaa;
+      color: #0f172a;
     }
 
     @media (max-width: 768px) {
@@ -100,72 +138,44 @@
   </header>
 
   <!-- Web Exploitation -->
-  <section>
-    <h2>🧨 Web Exploitation</h2>
-    <p class="challenge-msg">"Can you crack the code before the system cracks you?"</p>
-    <div class="grid">
-      <div class="card" onclick="location.href='sql-injection.html'">
-        <h3>SQL Injection</h3>
-        <p>Extract data from vulnerable web apps.</p>
-      </div>
-      <div class="card" onclick="location.href='xss.html'">
-        <h3>Cross-Site Scripting (XSS)</h3>
-        <p>Execute malicious scripts in user browsers.</p>
-      </div>
-      <div class="card" onclick="location.href='file-upload.html'">
-        <h3>Malicious File Upload</h3>
-        <p>Upload shells and bypass file filters.</p>
-      </div>
-    </div>
-  </section>
+<section class="roles">
+  <h2>Web Exploitation Scenarios</h2>
+  <h2></h2>
 
-  <!-- Post Exploitation -->
-  <section>
-    <h2>🧓 Post Exploitation</h2>
-    <p class="challenge-msg">"You're inside... but can you elevate and dominate?"</p>
-    <div class="grid">
-      <div class="card" onclick="location.href='privilege-escalation.html'">
-        <h3>Privilege Escalation</h3>
-        <p>Gain root/admin access from low-priv users.</p>
-      </div>
-      <div class="card" onclick="location.href='lateral-movement.html'">
-        <h3>Lateral Movement</h3>
-        <p>Move through the network without being caught.</p>
+  <div class="grid">
+    <div class="role-card">
+      <img src="https://tse3.mm.bing.net/th/id/OIP.PC4XiefnA69MK-f7bKLG1AHaEO?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Access Control">
+      <div class="content">
+        <h3>Access Control</h3>
+        <p class="challenge-msg">"The gates are locked — can you outsmart the system and break in before anyone notices?"</p>
+        <p>Bypass flawed access controls to expose hidden and unauthorized data.</p>
+        <button onclick="location.href='Attack-Types/Access_Control.html'">Show scenarios</button>
       </div>
     </div>
-  </section>
 
-  <!-- Phishing & SE -->
-  <section>
-    <h2>🎯 Phishing & Social Engineering</h2>
-    <p class="challenge-msg">"No exploit needed... just words. Outsmart your target."</p>
-    <div class="grid">
-      <div class="card" onclick="location.href='phishing-email.html'">
-        <h3>Phishing Email</h3>
-        <p>Craft emails to trick targets into opening payloads.</p>
-      </div>
-      <div class="card" onclick="location.href='fake-login.html'">
-        <h3>Fake Login Page</h3>
-        <p>Steal credentials using a cloned portal.</p>
+    <div class="role-card">
+      <img src="https://aspiainfotech.com/wp-content/uploads/2024/03/NBFC-1.png" alt="Business Logic">
+      <div class="content">
+        <h3>Business Logic</h3>
+        <p class="challenge-msg">"Twist the rules, bend the logic — can you turn their system against itself?"</p>
+        <p>Abuse design flaws to gain unfair advantages and break core app workflows.</p>
+        <button onclick="location.href='Attack-Types/B_logic.html'">Show scenarios</button>
       </div>
     </div>
-  </section>
 
-  <!-- Malware Simulation -->
-  <section>
-    <h2>💀 Malware Simulation</h2>
-    <p class="challenge-msg">"What happens when your payload lands? Let chaos unfold."</p>
-    <div class="grid">
-      <div class="card" onclick="location.href='ransomware.html'">
-        <h3>Ransomware Simulation</h3>
-        <p>Encrypt files and demand ransom. Will they pay?</p>
-      </div>
-      <div class="card" onclick="location.href='reverse-shell.html'">
-        <h3>Reverse Shell</h3>
-        <p>Establish remote access and control the system.</p>
+    <div class="role-card">
+      <img src="https://tse1.mm.bing.net/th/id/OIP.WVC00oaQOrYKYPQOIRI2NwHaEX?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Auth">
+      <div class="content">
+        <h3>Authentication</h3>
+        <p class="challenge-msg">"The login page thinks you're locked out — prove it wrong and take control." </p>
+        <p>Exploit weak authentication to hijack accounts or escalate privileges.</p>
+        <button onclick="location.href='Attack-Types/Auth.html'">Launch Attack</button>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+
 
 </body>
 </html>

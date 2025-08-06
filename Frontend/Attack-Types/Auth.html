@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication Scenarios</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111827;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      position: relative;
+      height: 250px;
+      background: url('https://wallpaperaccess.com/full/2414353.jpg') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #22d3ee;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+    }
+
+    .challenge-msg {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #9ca3af;
+      margin: 20px auto;
+      font-style: italic;
+      max-width: 800px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto 2rem auto;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+      color: #111827;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 10px #0ea5e999;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      transform: scale(1.08);
+      background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+      box-shadow: 0 0 20px #22d3eeaa;
+      color: #0f172a;
+    }
+
+    .scenario-list {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .scenario-list.show {
+      display: block;
+      opacity: 1;
+    }
+
+    .scenario {
+      background-color: #1f2937;
+      padding: 1.2rem;
+      margin-bottom: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #0ea5e944;
+      transition: transform 0.3s ease;
+    }
+
+    .scenario:hover {
+      transform: translateY(-5px);
+    }
+
+    .scenario h3 {
+      color: #22d3ee;
+      margin-bottom: 0.5rem;
+    }
+
+    .scenario p {
+      color: #d1d5db;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Authentication Exploitation</h1>
+  </header>
+
+  <div class="challenge-msg">
+    "The login page thinks you're locked out — prove it wrong and take control."
+  </div>
+
+  <div class="container">
+    <button onclick="toggleScenarios()">Show Scenarios</button>
+
+    <div class="scenario-list" id="scenarioList">
+      <div class="scenario">
+        <h3>Scenario 1</h3>
+        <p>Brute force attack on login form with weak rate-limiting.</p>
+      </div>
+      <div class="scenario">
+        <h3>Scenario 2</h3>
+        <p>Bypass 2FA using predictable token generation.</p>
+      </div>
+      <div class="scenario">
+        <h3>Scenario 3</h3>
+        <p>Session fixation through exposed token reuse.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleScenarios() {
+      const list = document.getElementById('scenarioList');
+      list.classList.toggle('show');
+    }
+  </script>
+
+</body>
+</html>
