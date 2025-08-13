@@ -10,8 +10,8 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0a1122 0%, #1a2a44 100%);
-      color: #f3f4f6;
+      background: linear-gradient(135deg, #0a0a0a 0%, #141a2f 100%);
+      color: #d4d4d8;
       margin: 0;
       padding: 0;
       overflow-x: hidden;
@@ -23,7 +23,7 @@
       position: fixed;
       width: 20px;
       height: 20px;
-      background: rgba(34, 211, 238, 0.5);
+      background: rgba(139, 30, 38, 0.5);
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
@@ -32,7 +32,7 @@
 
     .custom-cursor.hovered {
       transform: scale(1.5);
-      background: rgba(168, 85, 247, 0.7);
+      background: rgba(75, 85, 99, 0.7);
     }
 
     #particles-js {
@@ -50,8 +50,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.2) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.2) 0%, transparent 50%);
+      background: radial-gradient(circle at 20% 20%, rgba(139, 30, 38, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(75, 85, 99, 0.1) 0%, transparent 50%);
       animation: pulse 10s infinite ease-in-out;
       z-index: -1;
     }
@@ -64,11 +64,11 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      color: #22d3ee;
-      text-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
-      border-bottom: 2px solid rgba(34, 211, 238, 0.4);
-      box-shadow: 0 0 30px rgba(34, 211, 238, 0.4), inset 0 0 10px rgba(168, 85, 247, 0.3);
-      background: rgba(10, 17, 34, 0.3);
+      color: #8b1e26;
+      text-shadow: 0 0 12px rgba(139, 30, 38, 0.6);
+      border-bottom: 2px solid rgba(139, 30, 38, 0.4);
+      box-shadow: 0 0 30px rgba(139, 30, 38, 0.4), inset 0 0 10px rgba(75, 85, 99, 0.3);
+      background: rgba(10, 10, 10, 0.3);
       backdrop-filter: blur(12px);
     }
 
@@ -81,7 +81,7 @@
     .challenge-msg {
       text-align: center;
       font-size: 1.3rem;
-      color: #94a3b8;
+      color: #6b7280;
       margin: 2rem auto;
       font-style: italic;
       max-width: 900px;
@@ -93,7 +93,7 @@
       max-width: 1000px;
       margin: 0 auto;
       padding: 2rem;
-      background: rgba(31, 41, 55, 0.3);
+      background: rgba(10, 10, 10, 0.3);
       backdrop-filter: blur(12px);
       border-radius: 12px;
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
@@ -110,14 +110,14 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #06b6d4, #22d3ee);
+      background: linear-gradient(135deg, #8b1e26, #a6303a);
       border: none;
       padding: 12px 24px;
       font-size: 1.1rem;
       font-weight: 600;
       border-radius: 8px;
       transition: all 0.3s ease;
-      box-shadow: 0 0 15px rgba(34, 211, 238, 0.6);
+      box-shadow: 0 0 15px rgba(139, 30, 38, 0.6);
       position: relative;
       overflow: hidden;
     }
@@ -142,7 +142,7 @@
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 0 25px rgba(34, 211, 238, 0.9);
+      box-shadow: 0 0 25px rgba(139, 30, 38, 0.9);
     }
 
     .scenario-list {
@@ -159,12 +159,12 @@
     }
 
     .scenario {
-      background: rgba(31, 41, 55, 0.3);
+      background: rgba(10, 10, 10, 0.3);
       backdrop-filter: blur(12px);
       padding: 1.5rem;
       margin-bottom: 1.5rem;
       border-radius: 10px;
-      border: 1px solid rgba(34, 211, 238, 0.3);
+      border: 1px solid rgba(139, 30, 38, 0.3);
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
@@ -172,19 +172,19 @@
 
     .scenario:hover {
       transform: translateY(-5px);
-      box-shadow: 0 0 25px rgba(34, 211, 238, 0.6);
+      box-shadow: 0 0 25px rgba(139, 30, 38, 0.6);
     }
 
     .scenario h3 {
-      color: #22d3ee;
+      color: #8b1e26;
       font-size: 1.5rem;
       font-weight: 600;
-      text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+      text-shadow: 0 0 8px rgba(139, 30, 38, 0.5);
       margin-bottom: 0.5rem;
     }
 
     .scenario p {
-      color: #f3f4f6;
+      color: #d4d4d8;
       font-size: 1rem;
       line-height: 1.5;
     }
@@ -254,11 +254,11 @@
     particlesJS('particles-js', {
       particles: {
         number: { value: 50, density: { enable: true, value_area: 800 } },
-        color: { value: ['#22d3ee', '#a855f7'] },
+        color: { value: ['#8b1e26', '#4b5563'] },
         shape: { type: 'circle' },
         opacity: { value: 0.5, random: true },
         size: { value: 2.5, random: true },
-        line_linked: { enable: true, distance: 100, color: '#22d3ee', opacity: 0.3, width: 1 },
+        line_linked: { enable: true, distance: 100, color: '#8b1e26', opacity: 0.3, width: 1 },
         move: { enable: true, speed: 1.5, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
       },
       interactivity: {
