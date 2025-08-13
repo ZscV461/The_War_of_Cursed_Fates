@@ -1,0 +1,171 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "tahani",
+      "password": "123456",
+      "token": null,
+      "profile": {
+        "bio": "",
+        "avatar": ""
+      }
+    },
+    {
+      "id": 2,
+      "username": "yousry",
+      "password": "123456",
+      "token": null,
+      "profile": {
+        "bio": "",
+        "avatar": ""
+      }
+    },
+    {
+      "id": 3,
+      "username": "shady",
+      "password": "123456",
+      "token": "a81b0b967ba6875ef823eb86c0f3f3b90fd3f0ef3c1633962a500441cd280c9d",
+      "profile": {
+        "bio": "",
+        "avatar": ""
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "network",
+      "description": "network project team",
+      "creator_id": 1,
+      "members": [
+        {
+          "user_id": 2,
+          "role": "admin",
+          "purchased": false
+        },
+        {
+          "user_id": 3,
+          "role": "commenter",
+          "purchased": false
+        }
+      ],
+      "notes": [
+        {
+          "id": 1,
+          "content": "test",
+          "comments": [],
+          "created_at": "2025-08-13T01:54:24.736Z"
+        }
+      ],
+      "tasks": [],
+      "files": [],
+      "activity": [
+        {
+          "id": 1,
+          "type": "project_created",
+          "user_id": 1,
+          "message": "network created",
+          "timestamp": "2025-08-13T01:53:54.335Z"
+        },
+        {
+          "id": 2,
+          "type": "note_added",
+          "user_id": 1,
+          "message": "Note #1 added by tahani",
+          "timestamp": "2025-08-13T01:54:24.736Z"
+        },
+        {
+          "id": 3,
+          "type": "member_added",
+          "user_id": 1,
+          "message": "User 2 added as viewer",
+          "timestamp": "2025-08-13T01:56:50.428Z"
+        },
+        {
+          "id": 4,
+          "type": "member_added",
+          "user_id": 1,
+          "message": "User 3 added as commenter",
+          "timestamp": "2025-08-13T01:57:43.326Z"
+        },
+        {
+          "id": 5,
+          "type": "role_changed",
+          "user_id": 2,
+          "message": "yousry changed role to admin",
+          "timestamp": "2025-08-13T02:04:18.464Z"
+        },
+        {
+          "id": 6,
+          "type": "payment",
+          "user_id": 3,
+          "message": "shady purchased admin upgrade",
+          "timestamp": "2025-08-13T02:11:01.243Z"
+        },
+        {
+          "id": 7,
+          "type": "role_changed",
+          "user_id": 3,
+          "message": "shady changed role to admin",
+          "timestamp": "2025-08-13T02:11:20.351Z"
+        },
+        {
+          "id": 8,
+          "type": "member_removed",
+          "user_id": 2,
+          "message": "User 3 removed from project",
+          "timestamp": "2025-08-13T02:11:48.078Z"
+        },
+        {
+          "id": 9,
+          "type": "member_added",
+          "user_id": 2,
+          "message": "User 3 added as commenter",
+          "timestamp": "2025-08-13T02:11:58.934Z"
+        }
+      ]
+    }
+  ],
+  "exploits": {
+    "2": {
+      "step": 1
+    }
+  },
+  "notifications": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "message": "You created project network",
+      "read": false,
+      "timestamp": "2025-08-13T01:53:54.335Z"
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "message": "You were added to project network as viewer",
+      "read": false,
+      "timestamp": "2025-08-13T01:56:50.428Z"
+    },
+    {
+      "id": 3,
+      "user_id": 3,
+      "message": "You were added to project network as commenter",
+      "read": true,
+      "timestamp": "2025-08-13T01:57:43.326Z"
+    },
+    {
+      "id": 4,
+      "user_id": 3,
+      "message": "You were removed from project network",
+      "read": true,
+      "timestamp": "2025-08-13T02:11:48.078Z"
+    },
+    {
+      "id": 5,
+      "user_id": 3,
+      "message": "You were added to project network as commenter",
+      "read": true,
+      "timestamp": "2025-08-13T02:11:58.935Z"
+    }
+  ]
+}

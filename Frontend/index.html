@@ -4,247 +4,494 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The War of Cursed Fates</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     body {
       margin: 0;
       padding: 0;
-      background-color: #111827;
-      color: #e5e7eb;
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a1122 0%, #1a2a44 100%);
+      color: #f3f4f6;
       line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+      cursor: none;
     }
+
+    .custom-cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: rgba(34, 211, 238, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.2s ease;
+    }
+
+    .custom-cursor.hovered {
+      transform: scale(1.5);
+      background: rgba(168, 85, 247, 0.7);
+    }
+
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .radial-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.2) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.2) 0%, transparent 50%);
+      animation: pulse 10s infinite ease-in-out;
+      z-index: -1;
+    }
+
     header {
       position: relative;
-      height: 70vh; /* Reduced height */
-      max-width: 60%; /* Reduced width and framed look */
-      margin: 0 auto; /* Center the header */
-      border: 2px solid #22d3ee; /* Frame border */
+      height: 60vh;
+      max-width: 80%;
+      margin: 2rem auto;
+      border: 2px solid rgba(34, 211, 238, 0.4);
+      border-radius: 12px;
       overflow: hidden;
       display: flex;
-      flex-direction: column; /* Stack text vertically */
-      justify-content: flex-start; /* Align content to top */
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(34, 211, 238, 0.4), inset 0 0 10px rgba(168, 85, 247, 0.3);
+      background: rgba(10, 17, 34, 0.3);
+      backdrop-filter: blur(12px);
     }
+
     header video {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Fit video within frame without stretching */
-      opacity: 0.5;
+      object-fit: cover;
+      opacity: 0.7;
       z-index: 0;
     }
+
     header .content {
       position: relative;
       text-align: center;
       z-index: 1;
-      padding: 10px; /* Adjust padding for frame */
-      background: rgba(17, 24, 39, 0.7); /* Semi-transparent background for readability */
+      padding: 2rem;
+      background: rgba(10, 17, 34, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      animation: fadeInDown 1s ease-in-out;
     }
+
     header h1 {
-      font-size: 2rem; /* Further reduced to fit smaller frame */
+      font-size: 2.8rem;
+      font-weight: 700;
       color: #22d3ee;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-      margin-bottom: 0.5rem; /* Reduced margin */
+      text-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
+      margin-bottom: 0.5rem;
     }
+
     header p {
-      font-size: 1rem; /* Further reduced to fit smaller frame */
-      color: #d1d5db;
+      font-size: 1.3rem;
+      color: #f3f4f6;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #06b6d4, #22d3ee);
+      border: none;
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(34, 211, 238, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+
+    .btn-primary:hover::after {
+      width: 200px;
+      height: 200px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(34, 211, 238, 0.9);
+    }
+
     section {
       padding: 4rem 1rem;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
     }
+
     section h2 {
       font-size: 2.5rem;
       color: #22d3ee;
       text-align: center;
       margin-bottom: 2rem;
+      text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+      animation: fadeIn 1s ease-in-out;
     }
+
     .description {
-      background-color: #1f2937;
-      text-align: center;
+      background: rgba(31, 41, 55, 0.3);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+      transform: translateY(50px);
+      opacity: 0;
+      transition: transform 0.8s ease, opacity 0.8s ease;
     }
+
+    .description.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
     .description p {
       font-size: 1.2rem;
-      color: #d1d5db;
+      color: #f3f4f6;
       max-width: 800px;
       margin: 0 auto;
+      text-align: center;
     }
+
     .challenges {
-      background-color: #111827;
+      background: transparent;
     }
+
     .challenges .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
     }
+
     .challenges .card {
-      background-color: #1f2937;
+      background: rgba(31, 41, 55, 0.3);
+      backdrop-filter: blur(12px);
       padding: 1.5rem;
-      border-radius: 8px;
-      transition: transform 0.3s ease;
+      border-radius: 10px;
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transform: translateY(50px);
+      opacity: 0;
     }
+
+    .challenges .card.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
     .challenges .card:hover {
-      transform: scale(1.05);
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(34, 211, 238, 0.6);
     }
+
     .challenges .card p {
       font-size: 1.1rem;
-      color: #d1d5db;
+      color: #f3f4f6;
+      text-align: center;
     }
+
     .roles {
-      background-color: #1f2937;
+      background: rgba(31, 41, 55, 0.3);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+      transform: translateY(50px);
+      opacity: 0;
+      transition: transform 0.8s ease, opacity 0.8s ease;
     }
+
+    .roles.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
     .roles .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1.5rem;
     }
+
     .role-card {
-      background-color: #111827;
-      border-radius: 8px;
+      background: rgba(17, 24, 39, 0.5);
+      backdrop-filter: blur(12px);
+      border-radius: 10px;
+      border: 1px solid rgba(34, 211, 238, 0.3);
       overflow: hidden;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
     }
+
     .role-card:hover {
-      transform: scale(1.05);
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(34, 211, 238, 0.6);
     }
+
     .role-card img {
       width: 100%;
       height: 200px;
       object-fit: cover;
-      opacity: 0.75;
-      transition: opacity 0.3s ease;
+      opacity: 0.8;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
+
     .role-card:hover img {
       opacity: 1;
+      transform: scale(1.05);
     }
+
     .role-card .content {
       padding: 1.5rem;
     }
+
     .role-card h3 {
       font-size: 1.5rem;
       color: #22d3ee;
+      text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
       margin-bottom: 0.5rem;
     }
+
     .role-card p {
       font-size: 1rem;
-      color: #d1d5db;
+      color: #f3f4f6;
     }
+
     .role-card button {
       margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: #22d3ee;
-      color: #111827;
-      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #06b6d4, #22d3ee);
+      color: #0f172a;
+      font-weight: 600;
       border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
+      position: relative;
+      overflow: hidden;
     }
+
+    .role-card button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s ease, height 0.4s ease;
+    }
+
+    .role-card button:hover::after {
+      width: 200px;
+      height: 200px;
+    }
+
     .role-card button:hover {
-      background-color: #06b6d4;
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #22d3ee, #06b6d4);
+      box-shadow: 0 0 15px rgba(34, 211, 238, 0.9);
     }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0.3; }
+      100% { transform: scale(1); opacity: 0.5; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 768px) {
-      header h1 {
-        font-size: 1.5rem; /* Further reduce for mobile */
-      }
-      header p {
-        font-size: 0.9rem; /* Further reduce for mobile */
-      }
-      section h2 {
-        font-size: 2rem;
-      }
+      header { height: 50vh; max-width: 90%; }
+      header h1 { font-size: 2rem; }
+      header p { font-size: 1rem; }
+      section h2 { font-size: 2rem; }
+      .role-card img { height: 150px; }
+      .btn-primary { font-size: 1rem; padding: 10px 20px; }
     }
   </style>
 </head>
 <body>
-  <header>
-  <video id="header-video" loop muted autoplay>
-    <source src="../Data/header-vid.mp4" type="video/mp4">
-    Your browser does not support the video tag or the file could not be loaded.
-  </video>
-  <div class="content">
-    <h1>The War of Cursed Fates</h1>
-    <p>Master Cybersecurity Through Real-World Simulations</p>
-  </div>
-</header>
+  <div class="custom-cursor" id="cursor"></div>
+  <div id="particles-js"></div>
+  <div class="radial-overlay"></div>
 
+  <header>
+    <video id="header-video" loop muted autoplay>
+      <source src="../Data/header-vid.mp4" type="video/mp4">
+      Your browser does not support the video tag or the file could not be loaded.
+    </video>
+    <div class="content">
+      <h1>The War of Cursed Fates</h1>
+      <p>Master Cybersecurity Through Immersive Simulations</p>
+      <button class="btn btn-primary mt-3" onclick="scrollToRoles()">
+        <i class="fas fa-rocket me-2"></i>Start Your Journey
+      </button>
+    </div>
+  </header>
 
   <section class="description">
     <h2>What is The War of Cursed Fates?</h2>
     <p>
-      The War of Cursed Fates is an interactive cybersecurity training platform designed to simulate real-world attack and defense scenarios. Whether you're a university student, a corporate trainee, or part of a SOC team, our platform offers hands-on experience in Red Team, Blue Team, and Red vs. Blue live modes. Powered by AI-driven analytics, it provides detailed performance feedback to help you grow as a cybersecurity professional.
+      The War of Cursed Fates is a heart-pounding cybersecurity arena where warriors forge their skills in brutal attack and defense simulations. Crafted for aspiring hackers, corporate defenders, and elite SOC teams, it thrusts you into Red Team assaults, Blue Team fortification, and Red vs. Blue chaos. Fueled by AI-driven insights, it sharpens your prowess to conquer any cyber battlefield!
     </p>
   </section>
 
   <section class="challenges">
     <h2>Rise to the Challenge</h2>
     <div class="grid">
-      <div class="card">
-        <p>"Outsmart the enemy. Can you exploit the system before they lock you out?"</p>
+      <div class="card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <p>"Ignite the battlefield! Shatter enemy systems with relentless exploits!"</p>
       </div>
-      <div class="card">
-        <p>"Defend the network. Every second counts. Are you fast enough to stop the breach?"</p>
+      <div class="card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <p>"Defend the citadel! Crush incoming threats in a pulse-pounding race!"</p>
       </div>
-      <div class="card">
-        <p>"Red vs. Blue. Prove your skills in the ultimate cybersecurity showdown!"</p>
+      <div class="card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <p>"Forge your legend! Conquer all in a ruthless Red vs. Blue showdown!"</p>
       </div>
     </div>
   </section>
 
-<section class="roles">
-  <h2>Choose Your Role</h2>
-  <div class="grid">
-    <div class="role-card">
-      <img src="https://wallpaperaccess.com/full/2414353.jpg" alt="Red Team">
-      <div class="content">
-        <h3>Red Team</h3>
-        <p>Launch attacks, exploit vulnerabilities, and test your offensive skills.</p>
-        <button onclick="playRoleSound('red')">Select Role</button>
+  <section class="roles">
+    <h2>Choose Your Role</h2>
+    <div class="grid">
+      <div class="role-card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <img src="https://wallpaperaccess.com/full/2414353.jpg" alt="Red Team">
+        <div class="content">
+          <h3>Red Team</h3>
+          <p>Unleash devastating attacks, exploit weaknesses, and dominate enemy networks!</p>
+          <button onclick="playRoleSound('red')"><i class="fas fa-fire me-2"></i>Select Role</button>
+        </div>
+      </div>
+      <div class="role-card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <img src="https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg" alt="Blue Team">
+        <div class="content">
+          <h3>Blue Team</h3>
+          <p>Stand as the ultimate shield, outsmarting hackers with ironclad defenses!</p>
+          <button onclick="playRoleSound('blue')"><i class="fas fa-shield-alt me-2"></i>Select Role</button>
+        </div>
+      </div>
+      <div class="role-card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <img src="https://wallpaperbat.com/img/53868590-gojo-vs-sukuna-wallpaper.png" alt="Red vs. Blue">
+        <div class="content">
+          <h3>Red vs. Blue</h3>
+          <p>Clash in an electrifying duel where only the sharpest survive!</p>
+          <button onclick="playRoleSound('duel')"><i class="fas fa-swords me-2"></i>Select Role</button>
+        </div>
       </div>
     </div>
-    <div class="role-card">
-      <img src="https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg" alt="Blue Team">
-      <div class="content">
-        <h3>Blue Team</h3>
-        <p>Monitor, detect, and respond to threats in real-time.</p>
-        <button onclick="playRoleSound('blue')">Select Role</button>
-      </div>
-    </div>
-    <div class="role-card">
-      <img src="https://wallpaperbat.com/img/53868590-gojo-vs-sukuna-wallpaper.png" alt="Red vs. Blue">
-      <div class="content">
-        <h3>Red vs. Blue</h3>
-        <p>Face off in a live battle of attack and defense.</p>
-        <button onclick="playRoleSound('duel')">Select Role</button>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<script>
-  const sounds = {
-    red: new Audio('../Data/fate.mp3'),
-    blue: new Audio('../Data/audio/blue-team.mp3'),
-    duel: new Audio('../Data/audio/duel.mp3')
-  };
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
+  <script>
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 50, density: { enable: true, value_area: 800 } },
+        color: { value: ['#22d3ee', '#a855f7'] },
+        shape: { type: 'circle' },
+        opacity: { value: 0.5, random: true },
+        size: { value: 2.5, random: true },
+        line_linked: { enable: true, distance: 100, color: '#22d3ee', opacity: 0.3, width: 1 },
+        move: { enable: true, speed: 1.5, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+        modes: { repulse: { distance: 80, duration: 0.4 }, push: { particles_nb: 3 } }
+      },
+      retina_detect: true
+    });
 
-  function playRoleSound(role) {
-  const sound = sounds[role];
-  if (sound) {
-    sound.play().then(() => {
-      setTimeout(() => {
-        alert(`Selected ${role.charAt(0).toUpperCase() + role.slice(1)} Team! Ready to start your training?`);
-        if (role === 'red') {
-          window.location.href = 'red-team.html'; // هذا هو اسم الصفحة الجديدة
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    });
+    document.querySelectorAll('button, a').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
         }
-      }, 500);
-    }).catch(error => console.error('Audio playback failed:', error));
-  }
-}
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.description, .challenges .card, .roles').forEach(el => observer.observe(el));
 
-</script>
+    const sounds = {
+      red: new Audio('../Data/fate.mp3'),
+      blue: new Audio('../Data/audio/blue-team.mp3'),
+      duel: new Audio('../Data/audio/duel.mp3')
+    };
+
+    function playRoleSound(role) {
+      const sound = sounds[role];
+      if (sound) {
+        sound.play().then(() => {
+          setTimeout(() => {
+            alert(`Selected ${role.charAt(0).toUpperCase() + role.slice(1)} Team! Ready to start your training?`);
+            if (role === 'red') {
+              window.location.href = 'red-team.html';
+            } else if (role === 'blue') {
+              window.location.href = 'blue-team.html';
+            } else if (role === 'duel') {
+              window.location.href = 'red-vs-blue.html';
+            }
+          }, 500);
+        }).catch(error => console.error('Audio playback failed:', error));
+      }
+    }
+
+    function scrollToRoles() {
+      document.querySelector('.roles').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
 </body>
-</html> 
+</html>
