@@ -5,21 +5,24 @@ const FileSync = require('lowdb/adapters/FileSync');
 const path = require('path');
 const crypto = require('crypto');
 const fs = require('fs');
+const cookieParser = require('cookie-parser'); // Added for cookie handling in 2FA vulnerability
 
 const app = express();
-const dataDir = path.join(__dirname, '../Frontend/Attack-Types/Access_Control/project_collab_lab/Data');
+const dataDir = path.join(__dirname, '../Data');
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 const adapter = new FileSync(path.join(dataDir, 'db.json'));
 const db = lowdb(adapter);
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../Frontend/Attack-Types/Access_Control/project_collab_lab')));
+app.use(cookieParser()); // Added for cookie handling
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 db.defaults({
   users: [],
   projects: [],
   exploits: {},
-  notifications: []
+  notifications: [],
+  trash: [] // Added for trash functionality
 }).write();
 
 function authMiddleware(req, res, next) {
@@ -38,10 +41,10 @@ function authMiddleware(req, res, next) {
 
 app.post('/api/reset', (req, res) => {
   db.set('users', [
-    { id: 1, username: 'admin1', password: 'pass1', token: null, profile: { bio: 'Admin user', avatar: '' } },
-    { id: 2, username: 'viewer2', password: 'pass2', token: null, profile: { bio: 'Viewer user', avatar: '' } },
-    { id: 3, username: 'creator3', password: 'pass3', token: null, profile: { bio: 'Creator user', avatar: '' } },
-    { id: 4, username: 'newuser4', password: 'pass4', token: null, profile: { bio: 'New user', avatar: '' } }
+    { id: 1, username: 'admin1', password: 'pass1', token: null, profile: { bio: 'Admin user', avatar: '' }, subscribed: false },
+    { id: 2, username: 'viewer2', password: 'pass2', token: null, profile: { bio: 'Viewer user', avatar: '' }, subscribed: false },
+    { id: 3, username: 'creator3', password: 'pass3', token: null, profile: { bio: 'Creator user', avatar: '' }, subscribed: false },
+    { id: 4, username: 'newuser4', password: 'pass4', token: null, profile: { bio: 'New user', avatar: '' }, subscribed: false }
   ]).write();
 
   db.set('projects', [
@@ -71,6 +74,7 @@ app.post('/api/reset', (req, res) => {
 
   db.set('exploits', {}).write();
   db.set('notifications', []).write();
+  db.set('trash', []).write(); // Added for trash
 
   res.json({ message: 'Lab reset successful' });
 });
@@ -81,7 +85,7 @@ app.post('/api/signup', (req, res) => {
     return res.status(400).json({ message: 'Username taken' });
   }
   const id = db.get('users').size().value() + 1;
-  db.get('users').push({ id, username, password, token: null, profile: { bio: '', avatar: '' } }).write();
+  db.get('users').push({ id, username, password, token: null, profile: { bio: '', avatar: '' }, subscribed: false }).write();
   res.json({ success: true });
 });
 
@@ -93,11 +97,23 @@ app.post('/api/login', (req, res) => {
   }
   const token = crypto.createHash('sha256').update(user.id + Date.now().toString()).digest('hex');
   db.get('users').find({ id: user.id }).assign({ token }).write();
+  res.cookie('_auth', 'false', { httpOnly: false }); // Set cookie for 2FA vulnerability
   res.json({ token });
+});
+
+app.post('/api/verify-2fa', (req, res) => {
+  const { code } = req.body;
+  if (code === '123456') {
+    res.cookie('_auth', 'true', { httpOnly: false }); // Set to true on valid code
+    res.json({ success: true });
+  } else {
+    res.status(400).json({ message: 'Invalid 2FA code' });
+  }
 });
 
 app.post('/api/logout', authMiddleware, (req, res) => {
   db.get('users').find({ id: req.user.id }).assign({ token: null }).write();
+  res.clearCookie('_auth');
   res.json({ success: true });
 });
 
@@ -132,6 +148,9 @@ app.get('/api/projects', authMiddleware, (req, res) => {
 app.post('/api/projects', authMiddleware, (req, res) => {
   const { name, description } = req.body;
   if (!name) return res.status(400).json({ message: 'Name required' });
+  const userProjects = db.get('projects').filter({ creator_id: req.user.id }).value().length;
+  const limit = req.user.subscribed ? 10 : 3;
+  if (userProjects >= limit) return res.status(403).json({ message: 'Project limit reached. Subscribe to create more.' });
   const id = db.get('projects').size().value() + 1;
   db.get('projects').push({
     id,
@@ -187,15 +206,54 @@ app.delete('/api/projects/:id', authMiddleware, (req, res) => {
   const project = db.get('projects').find({ id: projectId }).value();
   if (!project) return res.status(404).json({ message: 'Project not found' });
   if (project.creator_id !== req.user.id) return res.status(403).json({ message: 'Unauthorized' });
+  db.get('trash').push({ ...project, deleted_at: new Date().toISOString() }).write(); // Move to trash
   db.get('projects').remove({ id: projectId }).write();
   db.get('notifications').push({
     id: db.get('notifications').size().value() + 1,
     user_id: req.user.id,
-    message: `Project ${project.name} deleted`,
+    message: `Project ${project.name} moved to trash`,
     read: false,
     timestamp: new Date().toISOString()
   }).write();
   res.json({ success: true });
+});
+
+app.get('/api/trash', authMiddleware, (req, res) => {
+  const trashProjects = db.get('trash').filter({ creator_id: req.user.id }).value();
+  res.json(trashProjects);
+});
+
+app.post('/api/trash/:id/restore', authMiddleware, (req, res) => {
+  const projectId = +req.params.id;
+  const trashProject = db.get('trash').find({ id: projectId, creator_id: req.user.id }).value();
+  if (!trashProject) return res.status(404).json({ message: 'Project not found in trash' });
+  const userProjects = db.get('projects').filter({ creator_id: req.user.id }).value().length;
+  const limit = req.user.subscribed ? 10 : 3;
+  if (userProjects >= limit) return res.status(403).json({ message: 'Project limit reached. Subscribe to restore more.' });
+  db.get('projects').push({ ...trashProject, restored_at: new Date().toISOString() }).write();
+  db.get('trash').remove({ id: projectId }).write();
+  res.json({ success: true });
+});
+
+app.post('/api/subscribe', authMiddleware, (req, res) => {
+  // This endpoint is not actually used since payment always fails, but added for completeness
+  db.get('users').find({ id: req.user.id }).assign({ subscribed: true }).write();
+  res.json({ success: true });
+});
+
+app.post('/api/payment', (req, res) => {
+  // Always reject with relevant error
+  const { cardNumber, expiry, cvv } = req.body;
+  if (!cardNumber || cardNumber.length < 16) {
+    return res.status(400).json({ message: 'Invalid card number' });
+  }
+  if (!expiry || !/^\d{2}\/\d{2}$/.test(expiry)) {
+    return res.status(400).json({ message: 'Invalid expiry date' });
+  }
+  if (!cvv || cvv.length < 3) {
+    return res.status(400).json({ message: 'Invalid CVV' });
+  }
+  res.status(400).json({ message: 'Payment declined: Insufficient funds or invalid details' });
 });
 
 app.get('/api/projects/:id/access', authMiddleware, (req, res) => {
@@ -581,6 +639,21 @@ app.put('/api/notifications/:id/read', authMiddleware, (req, res) => {
 app.get('/api/progress', authMiddleware, (req, res) => {
   const exploits = db.get(`exploits.${req.user.id}`).value() || { step: 0 };
   res.json({ step: exploits.step });
+});
+
+// Added safe functions to simulate larger site
+app.get('/api/users/:id/profile', authMiddleware, (req, res) => {
+  const userId = +req.params.id;
+  const user = db.get('users').find({ id: userId }).value();
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  res.json({ username: user.username, bio: user.profile.bio, avatar: user.profile.avatar });
+});
+
+app.post('/api/feedback', authMiddleware, (req, res) => {
+  const { message } = req.body;
+  if (!message) return res.status(400).json({ message: 'Feedback required' });
+  // Simulate storing feedback safely
+  res.json({ success: true });
 });
 
 app.listen(3000, () => {

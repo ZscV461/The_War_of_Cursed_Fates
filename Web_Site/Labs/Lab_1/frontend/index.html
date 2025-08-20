@@ -6,10 +6,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f0f4f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .hero { background: linear-gradient(to right, #007bff, #6610f2); color: white; padding: 100px 0; text-align: center; }
-        .feature-card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background: white; }
-        footer { background: #343a40; color: white; padding: 20px 0; }
-        .hint-box { display: none; background: #fff3cd; border: 1px solid #ffeeba; padding: 15px; margin-top: 20px; }
+        .hero { background: linear-gradient(to right, #007bff, #6610f2); color: white; padding: 100px 0; text-align: center; border-radius: 0 0 20px 20px; }
+        .feature-card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background: white; border-radius: 10px; padding: 20px; }
+        footer { background: #343a40; color: white; padding: 20px 0; border-top: 1px solid #dee2e6; }
+        .hint-box { display: none; background: #fff3cd; border: 1px solid #ffeeba; padding: 15px; margin-top: 20px; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -43,19 +43,19 @@
             <h2 class="text-center mb-5">Key Features</h2>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="feature-card p-4 text-center">
+                    <div class="feature-card text-center">
                         <h4>Project Creation</h4>
                         <p>Create projects and invite team members with specific roles.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="feature-card p-4 text-center">
+                    <div class="feature-card text-center">
                         <h4>Note Sharing</h4>
                         <p>Share notes, add comments, and collaborate in real-time.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="feature-card p-4 text-center">
+                    <div class="feature-card text-center">
                         <h4>Role Management</h4>
                         <p>Assign roles like viewer, commenter, or upgrade to admin for full control.</p>
                     </div>
@@ -86,8 +86,10 @@
     <script>
         const hints = [
             "Examine the role change mechanism closely. Sometimes, the server might accept unexpected values in requests.",
-            "Server responses can be insightful. Consider what happens if access flags in responses are altered.",
-            "With elevated access, try performing operations on resources you may not fully control."
+            "With elevated access, try performing operations on resources you may not fully control.",
+            "Client-side security checks can be bypassed by inspecting and modifying local storage or cookies.",
+            "Sending multiple simultaneous requests might allow bypassing limits on actions like creating or restoring projects.",
+            "Deleted items in trash can be restored, but try parallel requests to exceed limits."
         ];
         let hintIndex = 0;
         function showNextHint() {

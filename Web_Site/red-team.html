@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Access Control Scenarios - CyberLab</title>
+  <title>Red Team Arena</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     body {
+      margin: 0;
+      padding: 0;
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #0a0a0a 0%, #141a2f 100%);
       color: #d4d4d8;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
+      line-height: 1.6;
       position: relative;
+      overflow-x: hidden;
       cursor: none;
     }
 
@@ -58,71 +59,157 @@
 
     header {
       position: relative;
-      height: 300px;
-      background: url('https://wallpaperaccess.com/full/2414353.jpg') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #8b1e26;
-      text-shadow: 0 0 12px rgba(139, 30, 38, 0.6);
+      height: 60vh;
       border-bottom: 2px solid rgba(139, 30, 38, 0.4);
       box-shadow: 0 0 30px rgba(139, 30, 38, 0.4), inset 0 0 10px rgba(75, 85, 99, 0.3);
       background: rgba(10, 10, 10, 0.3);
       backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
-    header h1 {
-      font-size: 3rem;
-      font-weight: 700;
+    header img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    header .content {
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
       animation: fadeInDown 1s ease-in-out;
     }
 
-    .challenge-msg {
-      text-align: center;
-      font-size: 1.3rem;
-      color: #6b7280;
-      margin: 2rem auto;
-      font-style: italic;
-      max-width: 900px;
-      text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-      animation: fadeIn 1.5s ease-in-out;
+    header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #8b1e26;
+      text-shadow: 0 0 12px rgba(139, 30, 38, 0.6);
+      margin-bottom: 0.5rem;
     }
 
-    .container {
-      max-width: 1000px;
+    header p {
+      font-size: 1.3rem;
+      color: #d4d4d8;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+
+    section {
+      padding: 4rem 1rem;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem;
+      position: relative;
+    }
+
+    section h2 {
+      font-size: 2.5rem;
+      color: #8b1e26;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 10px rgba(139, 30, 38, 0.5);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .roles {
       background: rgba(10, 10, 10, 0.3);
       backdrop-filter: blur(12px);
       border-radius: 12px;
+      padding: 2rem;
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-      position: relative;
-      z-index: 1;
       transform: translateY(50px);
       opacity: 0;
       transition: transform 0.8s ease, opacity 0.8s ease;
     }
 
-    .container.visible {
+    .roles.visible {
       transform: translateY(0);
       opacity: 1;
     }
 
-    .btn-primary {
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .role-card {
+      background: rgba(10, 10, 10, 0.5);
+      backdrop-filter: blur(12px);
+      border-radius: 10px;
+      border: 1px solid rgba(139, 30, 38, 0.3);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .role-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(139, 30, 38, 0.6);
+    }
+
+    .role-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      opacity: 0.8;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .role-card:hover img {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .role-card .content {
+      padding: 1.5rem;
+    }
+
+    .role-card h3 {
+      font-size: 1.5rem;
+      color: #8b1e26;
+      text-shadow: 0 0 8px rgba(139, 30, 38, 0.5);
+      margin-bottom: 0.5rem;
+    }
+
+    .role-card .challenge-msg {
+      font-style: italic;
+      color: #6b7280;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .role-card p {
+      font-size: 1rem;
+      color: #d4d4d8;
+    }
+
+    .role-card button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
       background: linear-gradient(135deg, #8b1e26, #a6303a);
-      border: none;
-      padding: 12px 24px;
-      font-size: 1.1rem;
+      color: #0a0a0a;
       font-weight: 600;
+      border: none;
       border-radius: 8px;
       transition: all 0.3s ease;
-      box-shadow: 0 0 15px rgba(139, 30, 38, 0.6);
+      box-shadow: 0 0 10px rgba(139, 30, 38, 0.6);
       position: relative;
       overflow: hidden;
     }
 
-    .btn-primary::after {
+    .role-card button::after {
       content: '';
       position: absolute;
       top: 50%;
@@ -135,58 +222,15 @@
       transition: width 0.4s ease, height 0.4s ease;
     }
 
-    .btn-primary:hover::after {
+    .role-card button:hover::after {
       width: 200px;
       height: 200px;
     }
 
-    .btn-primary:hover {
+    .role-card button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 0 25px rgba(139, 30, 38, 0.9);
-    }
-
-    .scenario-list {
-      display: none;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
-    }
-
-    .scenario-list.show {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .scenario {
-      background: rgba(10, 10, 10, 0.3);
-      backdrop-filter: blur(12px);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-radius: 10px;
-      border: 1px solid rgba(139, 30, 38, 0.3);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-    }
-
-    .scenario:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 25px rgba(139, 30, 38, 0.6);
-    }
-
-    .scenario h3 {
-      color: #8b1e26;
-      font-size: 1.5rem;
-      font-weight: 600;
-      text-shadow: 0 0 8px rgba(139, 30, 38, 0.5);
-      margin-bottom: 0.5rem;
-    }
-
-    .scenario p {
-      color: #d4d4d8;
-      font-size: 1rem;
-      line-height: 1.5;
+      background: linear-gradient(135deg, #a6303a, #8b1e26);
+      box-shadow: 0 0 15px rgba(139, 30, 38, 0.9);
     }
 
     @keyframes pulse {
@@ -206,10 +250,12 @@
     }
 
     @media (max-width: 768px) {
+      header { height: 50vh; }
       header h1 { font-size: 2rem; }
-      .challenge-msg { font-size: 1rem; }
-      .container { padding: 1rem; }
-      .btn-primary { font-size: 1rem; padding: 10px 20px; }
+      header p { font-size: 1rem; }
+      section h2 { font-size: 2rem; }
+      .role-card img { height: 150px; }
+      .role-card button { font-size: 0.9rem; padding: 0.6rem 1.2rem; }
     }
   </style>
 </head>
@@ -219,33 +265,45 @@
   <div class="radial-overlay"></div>
 
   <header>
-    <h1>Access Control Exploitation - CyberLab</h1>
+    <img src="https://wallpaperaccess.com/full/2414353.jpg" alt="Red Team">
+    <div class="content">
+      <h1>Red Team Arena</h1>
+      <p>Launch, Exploit.</p>
+    </div>
   </header>
 
-  <div class="challenge-msg">
-    "Breach the unbreakable! Outwit the system and claim victory before the alarms sound!"
-  </div>
-
-  <div class="container">
-    <button class="btn btn-primary" onclick="toggleScenarios()">
-      <i class="fas fa-rocket me-2"></i>Explore Scenarios
-    </button>
-
-    <div class="scenario-list" id="scenarioList">
-      <div class="scenario" data-tilt data-tilt-max="10" data-tilt-speed="400" onclick="redirectWithFade('Access_Control/project_collab_lab/index.html')">
-        <h3>Scenario 1: ProjectCollab Breach</h3>
-        <p>Exploit vertical privilege escalation in a project collaboration platform by tampering with API responses to gain admin access and modifying user roles without authorization.</p>
+  <section class="roles">
+    <h2>Web Exploitation Scenarios</h2>
+    <div class="grid">
+      <div class="role-card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <img src="https://tse3.mm.bing.net/th/id/OIP.PC4XiefnA69MK-f7bKLG1AHaEO?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Lab 1">
+        <div class="content">
+          <h3>Lab 1</h3>
+          <p class="challenge-msg">"Enter the first challenge! Test your skills in a simulated environment!"</p>
+          <p>Explore vulnerabilities and sharpen your hacking prowess in this initial lab!</p>
+          <button onclick="location.href='http://127.0.0.1:3000'"><i class="fas fa-vial me-2"></i>Show scenarios</button>
+        </div>
       </div>
-      <div class="scenario" data-tilt data-tilt-max="10" data-tilt-speed="400" onclick="redirectWithFade('scenario2.html')">
-        <h3>Scenario 2: Token Tampering</h3>
-        <p>Horizontal privilege escalation using tampered session tokens.</p>
+      <div class="role-card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <img src="https://aspiainfotech.com/wp-content/uploads/2024/03/NBFC-1.png" alt="Lab 2">
+        <div class="content">
+          <h3>Lab 2</h3>
+          <p class="challenge-msg">"Dive deeper! Face advanced challenges to master your craft!"</p>
+          <p>Tackle complex scenarios to enhance your exploitation techniques in this lab!</p>
+          <button onclick="location.href='Labs/Lab_2'"><i class="fas fa-vial me-2"></i>Show scenarios</button>
+        </div>
       </div>
-      <div class="scenario" data-tilt data-tilt-max="10" data-tilt-speed="400" onclick="redirectWithFade('scenario3.html')">
-        <h3>Scenario 3: Hidden Admin Access</h3>
-        <p>Accessing hidden admin panels through insecure routing.</p>
+      <div class="role-card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <img src="https://tse1.mm.bing.net/th/id/OIP.WVC00oaQOrYKYPQOIRI2NwHaEX?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Lab 3">
+        <div class="content">
+          <h3>Lab 3</h3>
+          <p class="challenge-msg">"Master the art! Conquer the ultimate test of skill!"</p>
+          <p>Push your limits with the most challenging vulnerabilities in this advanced lab!</p>
+          <button onclick="location.href='Labs/Lab_3'"><i class="fas fa-vial me-2"></i>Show scenarios</button>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -286,19 +344,7 @@
         }
       });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.container').forEach(el => observer.observe(el));
-
-    function toggleScenarios() {
-      const list = document.getElementById('scenarioList');
-      list.classList.toggle('show');
-    }
-
-    function redirectWithFade(url) {
-      document.body.style.opacity = '0';
-      setTimeout(() => {
-        window.location.href = url;
-      }, 500);
-    }
+    document.querySelectorAll('.roles').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
