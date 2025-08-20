@@ -25,6 +25,13 @@ db.defaults({
   trash: [] // Added for trash functionality
 }).write();
 
+// Track concurrent requests for each endpoint
+const requestCounters = {
+  '/api/projects': { count: 0, batch: 0 },
+  '/api/trash/:id/restore': { count: 0, batch: 0 },
+  '/api/projects/:id/notes': { count: 0, batch: 0 }
+};
+
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -145,34 +152,6 @@ app.get('/api/projects', authMiddleware, (req, res) => {
   res.json(projects);
 });
 
-app.post('/api/projects', authMiddleware, (req, res) => {
-  const { name, description } = req.body;
-  if (!name) return res.status(400).json({ message: 'Name required' });
-  const userProjects = db.get('projects').filter({ creator_id: req.user.id }).value().length;
-  const limit = req.user.subscribed ? 10 : 3;
-  if (userProjects >= limit) return res.status(403).json({ message: 'Project limit reached. Subscribe to create more.' });
-  const id = db.get('projects').size().value() + 1;
-  db.get('projects').push({
-    id,
-    name,
-    description,
-    creator_id: req.user.id,
-    members: [],
-    notes: [],
-    tasks: [],
-    files: [],
-    activity: [{ id: 1, type: 'project_created', user_id: req.user.id, message: `${name} created`, timestamp: new Date().toISOString() }]
-  }).write();
-  db.get('notifications').push({
-    id: db.get('notifications').size().value() + 1,
-    user_id: req.user.id,
-    message: `You created project ${name}`,
-    read: false,
-    timestamp: new Date().toISOString()
-  }).write();
-  res.json({ id });
-});
-
 app.get('/api/projects/:id', authMiddleware, (req, res) => {
   const project = db.get('projects').find({ id: +req.params.id }).value();
   if (!project || (project.creator_id !== req.user.id && !project.members.some(m => m.user_id === req.user.id))) {
@@ -228,11 +207,37 @@ app.post('/api/trash/:id/restore', authMiddleware, (req, res) => {
   const trashProject = db.get('trash').find({ id: projectId, creator_id: req.user.id }).value();
   if (!trashProject) return res.status(404).json({ message: 'Project not found in trash' });
   const userProjects = db.get('projects').filter({ creator_id: req.user.id }).value().length;
-  const limit = req.user.subscribed ? 10 : 3;
+  const limit = req.user.subscribed ? 20 : 3;
   if (userProjects >= limit) return res.status(403).json({ message: 'Project limit reached. Subscribe to restore more.' });
-  db.get('projects').push({ ...trashProject, restored_at: new Date().toISOString() }).write();
-  db.get('trash').remove({ id: projectId }).write();
-  res.json({ success: true });
+
+  // Increment counter for this endpoint
+  requestCounters['/api/trash/:id/restore'].count++;
+  const totalRequests = requestCounters['/api/trash/:id/restore'].count;
+  const batch = requestCounters['/api/trash/:id/restore'].batch;
+
+  if (totalRequests > 10) {
+    // Split into two halves: first half (up to 50%) succeeds, second half fails
+    const half = Math.ceil(totalRequests / 2);
+    if (totalRequests > half + batch * 10) {
+      requestCounters['/api/trash/:id/restore'].count--;
+      return res.status(429).json({ message: 'Too many concurrent requests, try again later' });
+    }
+  }
+
+  // Collision-based delay
+  const collision = Math.random();
+  const delay = collision > 0.7 ? 200 + Math.floor(Math.random() * 101) : 50 + Math.floor(Math.random() * 101); // 50-150ms or 200-300ms
+  setTimeout(() => {
+    db.get('projects').push({ ...trashProject, restored_at: new Date().toISOString() }).write();
+    db.get('trash').remove({ id: projectId }).write();
+    res.json({ success: true });
+
+    // Reset counter and increment batch after processing
+    requestCounters['/api/trash/:id/restore'].count--;
+    if (requestCounters['/api/trash/:id/restore'].count === 0) {
+      requestCounters['/api/trash/:id/restore'].batch++;
+    }
+  }, delay);
 });
 
 app.post('/api/subscribe', authMiddleware, (req, res) => {
@@ -379,17 +384,45 @@ app.post('/api/projects/:id/notes', authMiddleware, (req, res) => {
   if (!project) return res.status(404).json({ message: 'Project not found' });
   const isAdmin = project.creator_id === req.user.id || project.members.some(m => m.user_id === req.user.id && m.role === 'admin');
   if (!isAdmin) return res.status(403).json({ message: 'Unauthorized' });
-  const noteId = (project.notes.length || 0) + 1;
-  project.notes.push({ id: noteId, content, comments: [], created_at: new Date().toISOString() });
-  project.activity.push({
-    id: (project.activity.length || 0) + 1,
-    type: 'note_added',
-    user_id: req.user.id,
-    message: `Note #${noteId} added by ${req.user.username}`,
-    timestamp: new Date().toISOString()
-  });
-  db.write();
-  res.json({ success: true });
+  const noteCount = project.notes.length;
+  if (noteCount >= 10) return res.status(400).json({ message: 'Maximum 10 notes allowed per project' });
+
+  // Increment counter for this endpoint
+  requestCounters['/api/projects/:id/notes'].count++;
+  const totalRequests = requestCounters['/api/projects/:id/notes'].count;
+  const batch = requestCounters['/api/projects/:id/notes'].batch;
+
+  if (totalRequests > 10) {
+    // Split into two halves: first half (up to 50%) succeeds, second half fails
+    const half = Math.ceil(totalRequests / 2);
+    if (totalRequests > half + batch * 10) {
+      requestCounters['/api/projects/:id/notes'].count--;
+      return res.status(429).json({ message: 'Too many concurrent requests, try again later' });
+    }
+  }
+
+  // Collision-based delay
+  const collision = Math.random();
+  const delay = collision > 0.7 ? 200 + Math.floor(Math.random() * 101) : 50 + Math.floor(Math.random() * 101); // 50-150ms or 200-300ms
+  setTimeout(() => {
+    const noteId = (project.notes.length || 0) + 1;
+    project.notes.push({ id: noteId, content, comments: [], created_at: new Date().toISOString() });
+    project.activity.push({
+      id: (project.activity.length || 0) + 1,
+      type: 'note_added',
+      user_id: req.user.id,
+      message: `Note #${noteId} added by ${req.user.username}`,
+      timestamp: new Date().toISOString()
+    });
+    db.write();
+    res.json({ success: true });
+
+    // Reset counter and increment batch after processing
+    requestCounters['/api/projects/:id/notes'].count--;
+    if (requestCounters['/api/projects/:id/notes'].count === 0) {
+      requestCounters['/api/projects/:id/notes'].batch++;
+    }
+  }, delay);
 });
 
 app.put('/api/projects/:id/notes/:noteId', authMiddleware, (req, res) => {
@@ -654,6 +687,60 @@ app.post('/api/feedback', authMiddleware, (req, res) => {
   if (!message) return res.status(400).json({ message: 'Feedback required' });
   // Simulate storing feedback safely
   res.json({ success: true });
+});
+
+app.post('/api/projects', authMiddleware, (req, res) => {
+  const { name, description } = req.body;
+  if (!name) return res.status(400).json({ message: 'Name required' });
+  const userProjects = db.get('projects').filter({ creator_id: req.user.id }).value().length;
+  const limit = req.user.subscribed ? 20 : 3;
+  if (userProjects >= limit) return res.status(403).json({ message: 'Project limit reached. Subscribe to create more.' });
+
+  // Increment counter for this endpoint
+  requestCounters['/api/projects'].count++;
+  const totalRequests = requestCounters['/api/projects'].count;
+  const batch = requestCounters['/api/projects'].batch;
+
+  if (totalRequests > 10) {
+    // Split into two halves: first half (up to 50%) succeeds, second half fails
+    const half = Math.ceil(totalRequests / 2);
+    if (totalRequests > half + batch * 10) {
+      requestCounters['/api/projects'].count--;
+      return res.status(429).json({ message: 'Too many concurrent requests, try again later' });
+    }
+  }
+
+  // Collision-based delay
+  const collision = Math.random();
+  const delay = collision > 0.7 ? 200 + Math.floor(Math.random() * 101) : 50 + Math.floor(Math.random() * 101); // 50-150ms or 200-300ms
+  setTimeout(() => {
+    const id = db.get('projects').size().value() + 1;
+    db.get('projects').push({
+      id,
+      name,
+      description,
+      creator_id: req.user.id,
+      members: [],
+      notes: [],
+      tasks: [],
+      files: [],
+      activity: [{ id: 1, type: 'project_created', user_id: req.user.id, message: `${name} created`, timestamp: new Date().toISOString() }]
+    }).write();
+    db.get('notifications').push({
+      id: db.get('notifications').size().value() + 1,
+      user_id: req.user.id,
+      message: `You created project ${name}`,
+      read: false,
+      timestamp: new Date().toISOString()
+    }).write();
+    res.json({ id });
+
+    // Reset counter and increment batch after processing
+    requestCounters['/api/projects'].count--;
+    if (requestCounters['/api/projects'].count === 0) {
+      requestCounters['/api/projects'].batch++;
+    }
+  }, delay);
 });
 
 app.listen(3000, () => {

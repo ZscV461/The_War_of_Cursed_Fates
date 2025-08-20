@@ -586,13 +586,14 @@
         }
 
         async function handleAddMember() {
-            const userId = document.getElementById('add-user-id').value;
-            const role = document.getElementById('add-user-role').value;
-            if (userId) {
-                await apiCall(`/api/projects/${projectId}/members`, 'POST', { userId, role });
-                loadProject();
-            }
-        }
+  const userId = document.getElementById('add-user-id').value;
+  const role = document.getElementById('add-user-role').value;
+  const targetProjectId = projectId; // Default to current project, but attacker can modify
+  if (userId) {
+    await apiCall(`/api/projects/${projectId}/members`, 'POST', { userId, role, projectId: targetProjectId });
+    loadProject();
+  }
+}
 
         async function handleRemoveMember(userId) {
             if (confirm('Remove member?')) {
@@ -675,7 +676,7 @@
             document.getElementById('edit-note-btn').onclick = async () => {
                 const newContent = document.getElementById('edit-note-content').value;
                 await apiCall(`/api/projects/${projectId}/notes/${noteId}`, 'PUT', { content: newContent });
-                loadProject();
+                               loadProject();
             };
         }
 
@@ -683,26 +684,20 @@
             document.getElementById('edit-task-title').value = title;
             document.getElementById('edit-task-desc').value = description;
             document.getElementById('edit-task-status').value = status;
-            document.getElementById('edit-task-assigned').value = assigned_to;
+            document.getElementById('edit-task-assigned').value = assigned_to || '';
             document.getElementById('edit-task-btn').onclick = async () => {
                 const newTitle = document.getElementById('edit-task-title').value;
-                const newDesc = document.getElementById('edit-task-desc').value;
+                const newDescription = document.getElementById('edit-task-desc').value;
                 const newStatus = document.getElementById('edit-task-status').value;
                 const newAssigned = document.getElementById('edit-task-assigned').value || null;
-                await apiCall(`/api/projects/${projectId}/tasks/${taskId}`, 'PUT', { title: newTitle, description: newDesc, status: newStatus, assigned_to: newAssigned });
+                await apiCall(`/api/projects/${projectId}/tasks/${taskId}`, 'PUT', { title: newTitle, description: newDescription, status: newStatus, assigned_to: newAssigned });
                 loadProject();
             };
         }
 
         async function checkProgress() {
             const progress = await apiCall('/api/progress');
-            if (progress.step === 1) {
-                alert('Progress: 1/2 - Advanced access achieved.');
-            } else if (progress.step === 2) {
-                alert('Progress: 2/2 - Full scenario completed. Congratulations!');
-            } else {
-                alert('Progress: 0/2 - Keep exploring.');
-            }
+            alert(`Exploit Progress: Step ${progress.step}`);
         }
 
         async function logout() {
